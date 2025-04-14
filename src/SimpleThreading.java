@@ -50,42 +50,46 @@ to code this any way you want as long as the threads run concurrently.
 
 */
 
-import java.util.ArrayList;
 
 public class SimpleThreading {
 
     private int counter = 90;
     private Object lock = new Object();
 
+
     public SimpleThreading(){
-        ArrayList<Thread> threads = new ArrayList<Thread>();
+        Thread t1 = new Thread(new InnerThread(1));
+        Thread t2 = new Thread(new InnerThread(2));
+        Thread t3 = new Thread(new InnerThread(3));
+        Thread t4 = new Thread(new InnerThread(4));
+        Thread t5 = new Thread(new InnerThread(5));
 
-        for(int i=1;i<=5;i++){
-            Thread t = new Thread(new InnerThread(i));
-            t.start();//run the threads
-            threads.add(t);
-            /*try {
-                t.join();
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }//nono, do not call this here*/
-        }
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
+        t5.start();
 
-        for(Thread t: threads){
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        try {
+            t1.join();
+            t2.join();
+            t3.join();
+            t4.join();
+            t5.join();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+        
 
 
         System.out.println("Main: at end counter = " + counter);
+
+
     }
 
     public static void main(String[] args) {
+
         new SimpleThreading();
     }
 
@@ -99,17 +103,11 @@ public class SimpleThreading {
 
         @Override
         public void run() {
-            for(int i=0;i<10;i++){
-
-              
-
+            while (counter !=0) {
                 synchronized(lock){
-                    if(counter<=0) break;
-                    counter = counter -3;
-                    System.out.println("Thread " + name + " counter " + counter);
+                    counter=counter-3;
+                    System.out.println("Thread"+this.name + " counter " +counter);
                 }
-                
-
                 try {
                     Thread.sleep(2);
                 } catch (InterruptedException e) {
