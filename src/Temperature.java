@@ -16,15 +16,12 @@ public class Temperature {
      * @return
      */
     public static TemperatureScale createF2C() {
-        TemperatureScale f2C = null;
 
-        // Delete from here
-       
-
-        
-        // to here
-
-        return f2C;
+        return new TemperatureScale(){
+            public double convert(double temperature){
+                return (temperature -32) / 1.8;
+            }
+        };
     }
 
     /**
@@ -35,7 +32,7 @@ public class Temperature {
      * @return
      */
     public static TemperatureScale createC2F() {
-        TemperatureScale c2F = null;
+        TemperatureScale c2F = temperature -> temperature * 1.8 + 32;
 
         // Delete from here
        
@@ -61,6 +58,11 @@ public class Temperature {
             // 2. Use f2C variable to convert the temperature to Celsius and
             //    store result in celciusTemps
         // Delete from here
+
+        for (Double temp : temps) {
+            celsiusTemps.add(f2C.convert(temp));
+            fahrenheitTemps.add(c2F.convert(temp));
+        }
        
 
         // to here
@@ -69,6 +71,8 @@ public class Temperature {
         // Using stream(), filter(), and forEach(), print on a separate line all
         // elements of fahrenheitTemps that are *above* feezing (32F)
         // Delete from here
+
+        fahrenheitTemps.stream().filter(f -> f>32).forEach(f -> System.out.println(f));
       
        
       
@@ -78,6 +82,8 @@ public class Temperature {
         // Using streams(), filter(), and forEach(), print on a separate line all
         // elements of celsiusTemps that are *below* freezing (0C)
         // Delete from here
+
+        celsiusTemps.stream().filter(c -> c<0).forEach(c -> System.out.println(c));
       
     
       
